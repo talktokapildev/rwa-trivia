@@ -9,6 +9,31 @@ const cookieParser = require('cookie-parser')();
 const cors = require('cors')({origin: true});
 const app = express();
 
+
+const fs = require('fs');
+const path = require('path');
+const elasticsearch = require('elasticsearch');
+const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/elasticsearch.config.json'), 'utf8'));
+
+
+app.get('/testES', (req, res) => {
+  let client = getElasticSearchClient();
+  client.ping({
+    requestTimeout: 10000,
+  }, function (error) {
+    if (error) {
+      console.error('elasticsearch cluster is down!');
+      res.send('elasticsearch cluster is down!');
+    } else {
+      console.log('All is well');
+      res.send(`Hello. ES is up`);
+    }
+  });
+});
+function getElasticSearchClient(): Elasticsearch.Client {
+  return new elasticsearch.Client(Object.assign({}, elasticsearchConfig)); //cloning config object to avoid reusing the same object (same object causes error)
+};
+
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
 exports.addMessage = functions.https.onRequest((req, res) => {

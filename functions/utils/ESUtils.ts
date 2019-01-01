@@ -35,7 +35,7 @@ export class ESUtils {
       functions.config().elasticsearch.index.production == 'true') {
 
       prefix = '';
-    }
+    }    
     console.log(`index prefix is "${prefix}"`);
     return prefix + index;
   }
@@ -48,7 +48,7 @@ export class ESUtils {
       index: index,
       type: type,
       id: key,
-      body: data
+      body: data,
     }).then((response) => {
       console.log('indexed ', key);
     })
@@ -143,7 +143,8 @@ export class ESUtils {
         const body = [];
         // TODO: build bulk index in batches (maybe 1000 at a time)
         data.forEach(d => {
-          body.push({ index: { index: index, type: d.type, _id: d.id } });
+          //body.push({ index: { index: index, type: d.type, _id: d.id } });
+          body.push({ Index: { _index: index, _type: d.type, _id: d.id } });
           body.push(d.source);
         });
         client.bulk({ 'body': body }).then(resp => {
@@ -212,7 +213,7 @@ export class ESUtils {
           'terms': { 'field': 'categoryIds' }
         },
         'tag_counts': {
-          'terms': { 'field': 'tags', 'size': 10 }
+          'terms': { 'field': 'tags.keyword', 'size': 10 }
         }
       }
     };
@@ -229,7 +230,7 @@ export class ESUtils {
           },
           'aggs': {
             'tag_counts': {
-              'terms': { 'field': 'tags', 'size': 10 }
+              'terms': { 'field': 'tags.keyword', 'size': 10 }
             }
           }
         };

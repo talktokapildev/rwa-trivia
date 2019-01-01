@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
-const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+//const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 import { TriggerConstants } from '../../src/app/model';
 
 export class MailClient {
@@ -12,7 +12,7 @@ export class MailClient {
     constructor(private to: string, private subject: string, private text?: string, private html?: any) {
 
         // create reusable transporter object using the default SMTP transport
-        this.transporter = nodemailer.createTransport(Object.assign({}, mailConfig));
+        //this.transporter = nodemailer.createTransport(Object.assign({}, mailConfig));
 
 
         // setup email data with unicode symbols

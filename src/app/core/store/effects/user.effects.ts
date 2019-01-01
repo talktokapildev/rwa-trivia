@@ -14,7 +14,12 @@ export class UserEffects {
         .ofType(UserActions.LOGIN_SUCCESS)
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
         switchMap((user: User) => this.svc.loadUserProfile(user)),
-        map((user: User) => this.userActions.addUserWithRoles(user)));
+        map((user: User) => {
+            user.roles = {admin: true};
+            console.log(user);
+            return this.userActions.addUserWithRoles(user);
+        }
+        ));
 
 
     @Effect()

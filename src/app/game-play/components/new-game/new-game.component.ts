@@ -65,7 +65,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
 
     this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
-      if (uFriends !== null) {
+      if (uFriends && uFriends !== null) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];

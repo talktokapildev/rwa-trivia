@@ -28,11 +28,16 @@ exports.getQuestions = (req, res) => {
     const start = req.params.start;
     const size = req.params.size;
     const criteria: SearchCriteria = req.body;
-    console.log(criteria);
+    console.log('criteria', criteria, start, size);
 
     ESUtils.getQuestions(start, size, criteria).then((results) => {
+        console.log('results', results);
         res.send(results);
     });
+
+    // questionControllerQuestionService.getAllQuestions().then((questions) => {
+    //     res.send(questions);
+    // });
 };
 
 
@@ -130,6 +135,7 @@ exports.getNextQuestion = (req, res) => {
  * return question
  */
 exports.getUpdatedQuestion = (req, res) => {
+    console.log("REQUEST",req);
     const questionId = req.params.questionId;
     const playerQnA = req.body.playerQnA;
 

@@ -3,13 +3,16 @@ const functionFireStoreClient = functionFireBaseClient.firestore();
 const functions = require('firebase-functions');
 const fs = require('fs');
 const path = require('path');
-const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+//const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 
 import {
-    Game, Question, Category, User, UserStatConstants, Invitation,
-    TriggerConstants, PlayerMode, OpponentType
+    Game, Question, Category, User, 
+    PlayerMode, OpponentType, Invitation
 } from '../../src/app/model';
+import {
+    UserStatConstants,    TriggerConstants
+} from '../../src/app/model/constants';
 import { ESUtils } from '../utils/ESUtils';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
@@ -65,9 +68,11 @@ exports.onInvitationWrite = functions.firestore.document('/invitations/{invitati
     const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
 
-    if (afterEventData !== beforeEventData && mailConfig.enableMail) {
+    //if (afterEventData !== beforeEventData && mailConfig.enableMail) {
+        if (afterEventData !== beforeEventData) {
         const invitation: Invitation = afterEventData;
-        const url = `${mailConfig.hosturl}${invitation.id}`;
+        //const url = `${mailConfig.hosturl}${invitation.id}`;
+        const url = "url for email";
         const htmlContent = `You have a new invitation request. Click <a href="${url}">Accept Invitation</a> to accept the invitation.`;
         const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
             TriggerConstants.invitationTxt, htmlContent);
